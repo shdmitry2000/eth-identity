@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blockchain PDF Index - sign dfs</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+</head>
+<body onload="App.listGRequests()">
+<h1>show Panel</h1>
+<h3>There are <span id="activeRequests"></span>  requests   .</h3>
+<br />
+<br />
+<br />
+
+<button onclick="App.listGRequests();">Reload</button>
+
+
+<br />
+<br />
+<h3>There are last sign status: <span class="status" id="registerStatus"></span></h3>
+
+<h3>init</h3>
+<button onclick="App.initBlockChain()">init</button>
+<br/>
+
+<br />
+<br />
+<h3>There are last sign status: <span class="status" id="registerStatus"></span></h3>
+
+<h3>add test requests</h3>
+<button onclick="App.addRequest(0x006FbaFdAdF4ef72AeBf71666537a6315FE24cAE ,0x006FbaFdAdF4ef72AeBf71666537a6315FE24cAE,0x006FbaFdAdF4ef72AeBf71666537a6315FE24cAE,'test request', 10000, (Date.now()/1000),(Date.now()/1000)+1000000,1,0);">add_test_Request</button>
+<br/>
+
+
+
+</body>
+</html>
