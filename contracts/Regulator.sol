@@ -1,148 +1,209 @@
 pragma solidity ^0.4.13;
 
-import "./GuaranteeRequest.sol";
-
-//###
-// general contract for better operations of the system
-//###
-contract owned {
-    //owner address for ownership validation
-    address owner;
-
-    //constractor to verify real owner assignment
-    function owned() {
-        owner = msg.sender;
-        log("owner=",owner);
-    }
-
-    //owner check modifier
-    modifier onlyOwner {
-        require(msg.sender == owner);
-        _;
-    }
-
-    //contract distruction by owner only
-    function close() onlyOwner {
-        log("##contract closed by owner=",owner);
-        selfdestruct(owner);
-    }
-
-    //constractor to verify real owner assignment
-    function getOwner() constant returns (address){
-        return owner ;
-    }
-    //log event for debug purposes
-    event log(string loga, address logb);
-}
+import "./KYC.sol";
 
 
-contract Regulator is owned,GuaranteeConst,IssuerManager,BeneficiaryManager,Customer{
+contract Regulator is Owners,IdentityUtils{
 
     //guarantee request states
 
 
     event RegulatoryContractDeployed (address msgSender,string msgstr,uint timestamp);
+
     function Regulator(){
         owner = msg.sender;
 
 
-        submitBeneficiary(msg.sender,"עיריית תל אביב-יפו","אבן גבירול 69 תל אביב-יפו");
-        submitCustomer(msg.sender,"ישראל ישראלי","הרצל 11 ראשון לציון");
-        submitIssuer(msg.sender,"בנק הפועלים","הנגב 11 תל אביב");
+       RegulatoryContractDeployed(owner,"Mined",now);
+    // add bank hapoalin
+        Company company=companies[owner];
+        company.name   = "בנק הפועלים";
+        company.local_address="הנגב 11 תל אביב";
+        companiesList.push(owner);
+        AddCompany(owner,company.name,block.timestamp);
 
-        RegulatoryContractDeployed(msg.sender,"Mined",now);
+    }
+
+
+    //describes the beneficiary object
+    struct Consumer {
+        uint tz;
+        address chainAddress;
+        mapping(address => address)  permissions;
+    }
+
+    mapping (uint=>Consumer) public consumers;
+    //    address   [] consumerList;
+
+    //describes the beneficiary object
+    struct Company {
+        string name;
+        string local_address;
+    }
+    mapping (address=>Company) public companies;
+    address   []  public companiesList;
+
+
+    function getConsumerAddress(uint tz ) public constant returns(address)   {
+        return consumers[tz].chainAddress;
+    }
+
+    event AddConsumer (address indexed consumerAddress,uint indexed  tz,uint timestamp);
+    function submitConsumer(address consumerAddress , uint tz) public  {
+        Consumer consumer=consumers[tz];
+        consumer.tz   = tz;
+        consumer.chainAddress    = consumerAddress;
+
+        AddConsumer(consumerAddress,tz,block.timestamp);
     }
 
 
 
-    //describes the customer object
-//    address [] public  guaranteeRequests;
 
-    function getRequestsAddressForCustomer() public constant returns (address[])
+    event AddCompany (address indexed companyAddress,string name,uint timestamp);
+    function submitCompany(address companyAddress , string _name,string _local_address) public  {
+        require(companyAddress!=owner);
+        Company company=companies[companyAddress];
+        company.name   = _name;
+        company.local_address=_local_address;
+        companiesList.push(companyAddress);
+        AddCompany(companyAddress,_name,block.timestamp);
+    }
+
+    function getCompany( address companyAddress) public constant returns(string,string)   {
+        Company memory company=companies[companyAddress];
+        return (company.name,company.local_address);
+    }
+
+
+
+    event AddCompanyRelation(address indexed consumerAddress,address indexed basecompanyAddress,uint indexed  tz,address permissionExtenderAddress,uint timestamp);
+    function addCompanyRelation(uint tz , address permissionExtenderAddress) public   {
+
+        // require(PermissionExtender(permissionExtenderAddress).getCustomerAddress ==getConsumerAddress(tz));
+
+        Consumer consumer=consumers[tz];
+        consumer.permissions[PermissionExtender(permissionExtenderAddress).getOwner()]   = permissionExtenderAddress;
+
+        AddCompanyRelation(getConsumerAddress(tz),PermissionExtender(permissionExtenderAddress).getOwner(), tz,permissionExtenderAddress,block.timestamp);
+    }
+
+    event AAA(int test);
+    event AddCompanionPermissionByBaseCompany(address indexed companionAddress,address indexed basecompanyAddress,uint indexed  tz,string attributeName,uint timestamp);
+    function addCompanionPermissionByBaseCompany(uint tz , address companionAddress,string attributeName) public   {
+
+        //        require(PermissionExtender(permissionExtenderAddress).getCustomerAddress ==getConsumerAddress(tz));
+        if (stringequal(attributeName,"*"))
+        {
+            PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission("fullname",companionAddress,1);
+            PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission("tz",companionAddress,1);
+            PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission("address",companionAddress,1);
+            PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission("bank_account",companionAddress,1);
+            PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission("creadit_card_number",companionAddress,1);
+            PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission("isSmocking",companionAddress,1);
+        }
+        else
+            PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission(attributeName,companionAddress,1);
+
+        AddCompanionPermissionByBaseCompany(companionAddress,msg.sender, tz,attributeName, now);
+        AAA( PermissionExtender(consumers[tz].permissions[msg.sender]).isAttributePermited("tz",companionAddress));
+    }
+
+    event ChangeCompanionPermissionByCustomer(address indexed companionAddress,address indexed basecompanyAddress,uint indexed  tz,string attributeName,uint timestamp);
+    function changeCompanionPermissionByCustomer(uint tz , address basecompanyAddress,address companionAddress,string attributeName,int permvalue) public   {
+
+        //        require(consumers[tz] ==msg.sender);
+
+        PermissionExtender(consumers[tz].permissions[basecompanyAddress]).setAttributePermission(attributeName,companionAddress,permvalue);
+
+        AddCompanionPermissionByBaseCompany(companionAddress,msg.sender, tz,attributeName, now);
+
+    }
+
+    function getConsumerAttributePermission(uint tz,address basecompanyAddress,string attributeName) public constant returns(int permission)
     {
-        return customers[msg.sender].guaranteeRequests;
+        // require(consumers[getConsumerAddress(tz)].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[basecompanyAddress]!= address(0));
+
+        return PermissionExtender(consumers[tz].permissions[basecompanyAddress]).isAttributePermited(attributeName,msg.sender);
 
     }
 
-    function getRequestsAddressForIssuer() public constant returns (address[])
+    function getConsumerAttributeValue(uint tz,address basecompanyAddress,string attributeName) public constant returns(bytes32 )
     {
-        return issuers[msg.sender].guaranteeRequests;
+        // require(consumers[tz].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[basecompanyAddress]!= address(0));
+        return PermissionExtender(consumers[tz].permissions[basecompanyAddress]).getAttribute(attributeName);
 
     }
 
-  function getGuarantieAddressForBeneficiary() public constant returns (address[])
-  {
-    return issuers[msg.sender].guaranteeRequests;
+    function getConsumerAttributeValueString(uint tz,address basecompanyAddress,string attributeName) public constant returns(string )
+    {
+        // require(consumers[tz].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[basecompanyAddress]!= address(0));
+        return bytes32ToString(PermissionExtender(consumers[tz].permissions[basecompanyAddress]).getAttribute(attributeName));
 
-  }
+    }
 
 
-//    function getActiveGuaranteesAddress() constant returns (string[])
+//    function setCompanionAttributePermission(uint tz,address companionAddress,string attributeName , int permission) public constant returns(bool)
 //    {
-//        string[] memory _guarantees = new string();
+//        // require(consumers[tz].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[msg.sender]!= address(0));
 //
-//                for(uint32 i=0; i<guaranteeRequests.length; i++) {
-//                    if(GuaranteeRequestExtender(guaranteeRequests[i]).getRequestState()==RequestState.accepted)
-//                    _guarantees.push(guaranteeRequests[i]);
-//                }
-//                return _guarantees;
-//
+//        PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission(attributeName,companionAddress,1);
+//        return true;
 //    }
 
-    event GuaranteeRequestCreated (address  requestId,address msgSender,address _customer ,address _bank ,address _beneficiary ,string _purpose,
-        uint _amount, uint _startDate,uint _endDate,IndexType _indexType,uint _indexDate,uint timestamp);
+//    event RequestConsumerPermissions(address companionAddress,address indexed consumerAddress,address indexed basecompanyAddress,uint tz,uint timestamp);
+//    function requestConsumerPermissions(uint tz,address basecompanyAddress) public constant returns(bool)
+//    {
+//        RequestConsumerPermissions(msg.sender,getConsumerAddress(tz),basecompanyAddress,tz,now);
+//    }
 
-    function createGuaranteeRequest(address _customer ,address _bank ,address _beneficiary ,string _purpose,
-    uint _amount, uint _startDate,uint _endDate,IndexType _indexType,uint _indexDate)  public returns (address)
+
+    function getCompaniesList() public constant returns(address   [])
     {
-        GuaranteeRequest greq=new  GuaranteeRequest(this,_customer,_bank ,_beneficiary,_purpose,_amount,_startDate,_endDate,_indexType ,_indexDate);
-        customers[msg.sender].guaranteeRequests.push(address(greq));
-        GuaranteeRequestCreated(address(greq),msg.sender,_customer , _bank,_beneficiary , _purpose,  _amount,  _startDate, _endDate, _indexType, _indexDate , now);
+        // require(consumers[getConsumerAddress(tz)].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[basecompanyAddress]!= address(0));
 
-        return address(greq);
+        return companiesList;
     }
 
 
-    function terminateGuarantee(address  _guaranteeRequest,string comment)  returns (bool)
+    function getTest() public constant returns(string  )
     {
-        GuaranteeRequestExtender ge=GuaranteeRequestExtender(_guaranteeRequest);
-        if ( msg.sender == ge.getBeneficiary() )
-        {
-            ge.termination(comment) ;
-            return true;
-        }
+        uint tz=123456789;
+        uint tz2=1321423;
+        submitConsumer(owner,tz);
+        submitConsumer(0xcdca444f8c28d111cde6388cea613b5325595991,tz2);
 
+        KYC kyc=new KYC(0xcdca444f8c28d111cde6388cea613b5325595991,"test cast",123456789,'herzel 12 TA', "213232", "2134 1234 1234 2132", false);
 
-        throw;
+        submitCompany(0x00a329c0648769A73afAc7F9381E08FB43dBEA72,"Test Company","test address");
+        address bankAddr=getOwner();
 
+        addCompanyRelation( tz , address(kyc)) ;
+
+        addCompanionPermissionByBaseCompany( tz , 0x00a329c0648769A73afAc7F9381E08FB43dBEA72,"*") ;
+
+        return "1";
+    }
+    // call from companion account
+    function getTest2(string tz,string attributeName) public constant returns(string attrValue   )
+    {
+
+        return getConsumerAttributeValueString(stringToUint(tz),getOwner(),attributeName) ;
 
     }
 
-    //    function changeGuarantee(address  _guaranteeRequest ,uint _newamount, uint _newendDate, string _comment) onlyBeneficiary returns (bool)
-    //    {
-    //        GuaranteeExtender ge=GuaranteeExtender(_guaranteeRequest);
-    //        if (ge.getBeneficiary()==msg.sender)
-    //        {
-    //            ( address _contract_id,address _customer,address _bank, address _beneficiary,
-    //            string _purpose,uint _amount,uint _startDate,uint _endDate,IndexType _indexType,
-    //            uint _indexDate,RequestState _status) = ge.getGuaranteeRequestData();
-    //            if (_status==RequestState.accepted && _amount>=_newamount && _newendDate<=_endDate)
-    //            {
-    //                address addr=new GuaranteeRequest(this,_customer,_bank ,_beneficiary,_purpose,_amount,_startDate,_endDate,_indexType ,_indexDate);
-    //                ge.
-    //                guaranteeRequests.push(addr);
-    //                return addr;
-    //            }
-    //
-    //        }
-    //
-    //
-    //
-    //    .endRequest(_comment)
-    //        guaranteeRequests.push(addr);
-    //        return addr;
-    //
-    //        return true;
-    //    }
+
+
+    // call from customer  account
+    function getTest3SwitchOn(string tz,address basecompanyAddress,address companionAddress,string attributeName ) public
+    {
+        return changeCompanionPermissionByCustomer(stringToUint(tz) ,  basecompanyAddress, companionAddress, attributeName,1) ;
+    }
+    // call from customer  account
+    function getTest3SwitchOff(string tz,address basecompanyAddress,address companionAddress,string attributeName ) public
+    {
+        changeCompanionPermissionByCustomer(stringToUint(tz) ,  basecompanyAddress, companionAddress, attributeName,0) ;
+    }
+
 
 }
