@@ -5,14 +5,16 @@ import "../stylesheets/app.css";
 import { default as Web3} from 'web3';
 import { default as contract } from 'truffle-contract';
 
+
+
 // Import our contract artifacts and turn them into usable abstractions.
-import  GuaranteeRequest_artifact from '../../build/contracts/GuaranteeRequest.json'
+import  KYC_artifact from '../../build/contracts/KYC.json'
 import  Regulator_artifact from '../../build/contracts/Regulator.json'
 
 // MetaCoin is our usable abstraction, which we'll use through the code below.
 
 var Regulator = contract(Regulator_artifact);
-var GuaranteeRequest = contract(GuaranteeRequest_artifact);
+var KYC = contract(KYC_artifact);
 
 const http=require('http');
 const web3providera=new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));

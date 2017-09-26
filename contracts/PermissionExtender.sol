@@ -1,9 +1,9 @@
 pragma solidity ^0.4.0;
 
 import "./Owners.sol";
-//import "./IdentityUtils.sol";
+import "./IdentityUtils.sol";
 
-contract PermissionExtender is Owners{
+contract PermissionExtender is Owners,IdentityUtils{
 
     mapping(string => mapping(address => int)) permissions;
 
@@ -22,8 +22,10 @@ contract PermissionExtender is Owners{
 
     //    function setAttribute(String attrName) constant private returns (int);
     //    function setAttributeValue(String attrName ,string attrVallue) constant private returns (boolean);
-    function getAttributeValue(string attrName)  public returns (bytes32);
-    function getCustomerAddress()  public returns (address);
+    function getAttributeValue(string attrName) constant public returns (bytes32);
+    function getCustomerAddress() constant public returns (address);
+    function getAttributeName(uint row) constant public returns (bytes32);
+    function getAttributeLength() constant public returns (uint);
 
 
     function setAttributePermission(string attrName ,address companionAddress , int permission)  constant public returns (bool)
@@ -46,12 +48,17 @@ contract PermissionExtender is Owners{
     }
 
 
-    function getAttribute(string attrName) constant public returns (bytes32 )
+
+    function getAttribute(string attrName,address companionAddress) constant public returns (bytes32 )
     {
-        if (isAttributePermited(attrName,msg.sender)!=0)
+
+        if (isAttributePermited(attrName,companionAddress)!=0)
         {
             return getAttributeValue(attrName);
         }
+            else
+                return stringToBytes32("not permited");
+
     }
 
 //    function getAttributeString(string attrName) constant public returns (string )

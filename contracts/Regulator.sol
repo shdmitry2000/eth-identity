@@ -1,7 +1,7 @@
 pragma solidity ^0.4.13;
 
 import "./KYC.sol";
-
+import "./IdentityUtils.sol";
 
 contract Regulator is Owners,IdentityUtils{
 
@@ -88,12 +88,11 @@ contract Regulator is Owners,IdentityUtils{
         AddCompanyRelation(getConsumerAddress(tz),PermissionExtender(permissionExtenderAddress).getOwner(), tz,permissionExtenderAddress,block.timestamp);
     }
 
-    event AAA(int test);
     event AddCompanionPermissionByBaseCompany(address indexed companionAddress,address indexed basecompanyAddress,uint indexed  tz,string attributeName,uint timestamp);
     function addCompanionPermissionByBaseCompany(uint tz , address companionAddress,string attributeName) public   {
 
         //        require(PermissionExtender(permissionExtenderAddress).getCustomerAddress ==getConsumerAddress(tz));
-        if (stringequal(attributeName,"*"))
+        if (stringcompare(attributeName,"*") == 0)
         {
             PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission("fullname",companionAddress,1);
             PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission("tz",companionAddress,1);
@@ -106,13 +105,13 @@ contract Regulator is Owners,IdentityUtils{
             PermissionExtender(consumers[tz].permissions[msg.sender]).setAttributePermission(attributeName,companionAddress,1);
 
         AddCompanionPermissionByBaseCompany(companionAddress,msg.sender, tz,attributeName, now);
-        AAA( PermissionExtender(consumers[tz].permissions[msg.sender]).isAttributePermited("tz",companionAddress));
     }
 
     event ChangeCompanionPermissionByCustomer(address indexed companionAddress,address indexed basecompanyAddress,uint indexed  tz,string attributeName,uint timestamp);
     function changeCompanionPermissionByCustomer(uint tz , address basecompanyAddress,address companionAddress,string attributeName,int permvalue) public   {
 
-        //        require(consumers[tz] ==msg.sender);
+        // require(consumers[tz] ==msg.sender);
+        require(companionAddress !=msg.sender );
 
         PermissionExtender(consumers[tz].permissions[basecompanyAddress]).setAttributePermission(attributeName,companionAddress,permvalue);
 
@@ -131,16 +130,31 @@ contract Regulator is Owners,IdentityUtils{
     function getConsumerAttributeValue(uint tz,address basecompanyAddress,string attributeName) public constant returns(bytes32 )
     {
         // require(consumers[tz].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[basecompanyAddress]!= address(0));
-        return PermissionExtender(consumers[tz].permissions[basecompanyAddress]).getAttribute(attributeName);
+        return PermissionExtender(consumers[tz].permissions[basecompanyAddress]).getAttribute(attributeName,msg.sender);
 
     }
 
-    function getConsumerAttributeValueString(uint tz,address basecompanyAddress,string attributeName) public constant returns(string )
+    function getConsumerAttributeName(uint tz,address basecompanyAddress,uint row) public constant returns(bytes32 )
     {
         // require(consumers[tz].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[basecompanyAddress]!= address(0));
-        return bytes32ToString(PermissionExtender(consumers[tz].permissions[basecompanyAddress]).getAttribute(attributeName));
+        return PermissionExtender(consumers[tz].permissions[basecompanyAddress]).getAttributeName( row);
 
     }
+    function getAttributeLength(uint tz,address basecompanyAddress) public constant returns(uint )
+    {
+        // require(consumers[tz].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[basecompanyAddress]!= address(0));
+        return PermissionExtender(consumers[tz].permissions[basecompanyAddress]).getAttributeLength( );
+
+    }
+
+
+
+//    function getConsumerAttributeValueString(uint tz,address basecompanyAddress,string attributeName) public constant returns(string )
+//    {
+//        // require(consumers[tz].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[basecompanyAddress]!= address(0));
+//        return bytes32ToString(PermissionExtender(consumers[tz].permissions[basecompanyAddress]).getAttribute(attributeName));
+//
+//    }
 
 
 //    function setCompanionAttributePermission(uint tz,address companionAddress,string attributeName , int permission) public constant returns(bool)
@@ -165,45 +179,45 @@ contract Regulator is Owners,IdentityUtils{
         return companiesList;
     }
 
-
-    function getTest() public constant returns(string  )
-    {
-        uint tz=123456789;
-        uint tz2=1321423;
-        submitConsumer(owner,tz);
-        submitConsumer(0xcdca444f8c28d111cde6388cea613b5325595991,tz2);
-
-        KYC kyc=new KYC(0xcdca444f8c28d111cde6388cea613b5325595991,"test cast",123456789,'herzel 12 TA', "213232", "2134 1234 1234 2132", false);
-
-        submitCompany(0x00a329c0648769A73afAc7F9381E08FB43dBEA72,"Test Company","test address");
-        address bankAddr=getOwner();
-
-        addCompanyRelation( tz , address(kyc)) ;
-
-        addCompanionPermissionByBaseCompany( tz , 0x00a329c0648769A73afAc7F9381E08FB43dBEA72,"*") ;
-
-        return "1";
-    }
-    // call from companion account
-    function getTest2(string tz,string attributeName) public constant returns(string attrValue   )
-    {
-
-        return getConsumerAttributeValueString(stringToUint(tz),getOwner(),attributeName) ;
-
-    }
-
-
-
-    // call from customer  account
-    function getTest3SwitchOn(string tz,address basecompanyAddress,address companionAddress,string attributeName ) public
-    {
-        return changeCompanionPermissionByCustomer(stringToUint(tz) ,  basecompanyAddress, companionAddress, attributeName,1) ;
-    }
-    // call from customer  account
-    function getTest3SwitchOff(string tz,address basecompanyAddress,address companionAddress,string attributeName ) public
-    {
-        changeCompanionPermissionByCustomer(stringToUint(tz) ,  basecompanyAddress, companionAddress, attributeName,0) ;
-    }
+//
+//    function getTest() public constant returns(string  )
+//    {
+//        uint tz=123456789;
+//        uint tz2=1321423;
+//        submitConsumer(owner,tz);
+//        submitConsumer(0xcdca444f8c28d111cde6388cea613b5325595991,tz2);
+//
+//        KYC kyc=new KYC(0xcdca444f8c28d111cde6388cea613b5325595991,"test cast",123456789,'herzel 12 TA', "213232", "2134 1234 1234 2132", false);
+//
+//        submitCompany(0x00a329c0648769A73afAc7F9381E08FB43dBEA72,"Test Company","test address");
+//        address bankAddr=getOwner();
+//
+//        addCompanyRelation( tz , address(kyc)) ;
+//
+//        addCompanionPermissionByBaseCompany( tz , 0x00a329c0648769A73afAc7F9381E08FB43dBEA72,"*") ;
+//
+//        return "1";
+//    }
+//    // call from companion account
+//    function getTest2(string tz,string attributeName) public constant returns(string attrValue   )
+//    {
+//
+//        return getConsumerAttributeValueString(stringToUint(tz),getOwner(),attributeName) ;
+//
+//    }
+//
+//
+//
+//    // call from customer  account
+//    function getTest3SwitchOn(string tz,address basecompanyAddress,address companionAddress,string attributeName ) public
+//    {
+//        return changeCompanionPermissionByCustomer(stringToUint(tz) ,  basecompanyAddress, companionAddress, attributeName,1) ;
+//    }
+//    // call from customer  account
+//    function getTest3SwitchOff(string tz,address basecompanyAddress,address companionAddress,string attributeName ) public
+//    {
+//        changeCompanionPermissionByCustomer(stringToUint(tz) ,  basecompanyAddress, companionAddress, attributeName,0) ;
+//    }
 
 
 }
