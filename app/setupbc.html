@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blockchain PDF Index - sign dfs</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+</head>
+<body onload="App.initSetupPage();">
+<h1>show Panel</h1>
+<br />
+<p id="accounts"></p>
+<br />
+<h3>There are <span id="activeAttributes"></span>  active atribs   .</h3>
+<br />
+<br />
+<br />
+
+<input id="SSN" type="text"  />tz
+<input id="account" type="text"  />account
+
+<button onclick="App.initCreateCustomer();">create customer</button>
+<br />
+<input id="companioncompanyaccount1" type="text"  disabled />companion company account
+<button onclick="App.initClal(App.getBCAccounts()[1]);"> create company clal</button>
+<br />
+<br />
+<input id="tz" type="text"  />tz
+<br />
+<input id="fname" type="text"  value="יעקב פריד" />full name
+<br />
+<input id="useraccount" type="text"  />user account
+<br />
+<input id="basecompanyaccount" type="text"  />base company account
+<br />
+<input id="companioncompanyaccount" type="text"  />companion company account
+<br />
+<input id="bankaccount" type="text"  value="פועלים 123, מח 987654" />bank account
+<br />
+<input id="creditcart" type="text" value="14-24 5326 1234 1234 4154" />creditcart
+<br />
+<input id="address" type="text"  value="הבשן 33 ת״א,651451" />address
+  <br />
+  <input id="smoking" type="text"  value="2 פעמים ביום" />smoking
+  <br />
+
+  <br />
+<br />
+
+<button onclick="App.connectDemo();">create BaseCompany Relation </button>
+
+
+<button onclick="App.checkDemoAttributes();">
+show attributes</button>
+
+<br />
+<br />
+<h3>There are last sign status: <span class="status" id="registerStatus"></span></h3>
+
+
+
+</body>
+</html>

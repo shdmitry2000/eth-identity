@@ -41,7 +41,7 @@ contract('Regulator', function(accounts) {
 
     it("should add customer at the beginning", function() {
         var Registry_instance;
-        var tz=123456789;
+        var tz='039342444';
         return Regulator.deployed().then(function(instance) {
             Registry_instance = instance;
             return Registry_instance.getOwner.call();
@@ -59,12 +59,12 @@ contract('Regulator', function(accounts) {
                     console.log("AddConsumer:");
                     console.log(log.args);
                     // break;
-                    return Registry_instance.getConsumerAddress.call("123456789");
+                    return Registry_instance.getConsumerAddress.call(tz);
                 }
             }
             console.log("call getConsumerAddress:",tz);
             // assert.fail("can't add consumer");
-            return Registry_instance.getConsumerAddress.call("123456789");
+            return Registry_instance.getConsumerAddress.call(tz);
 
         }).then(function (customerAddress) {
             console.log("customer");
@@ -114,11 +114,11 @@ contract('Regulator', function(accounts) {
 
     it("create basecompany KYC and relation", function() {
         var Registry_instance;
-        var tz=123456789;
+        var tz='039342444';
         var firevent=false;
         return Regulator.deployed().then(function(instance) {
             Registry_instance = instance;
-            return (KYC.new(account,"test cast",tz,'herzel 12 TA', "213232", "2134 1234 1234 2132", false));
+            return (KYC.new(account,"test cast",tz,'herzel 12 TA', "213232", "2134 1234 1234 2132", "smoking",false));
 
             // .then(assert.fail("index is not found"))
             }).then(function (kycExtender) {
@@ -167,7 +167,7 @@ contract('Regulator', function(accounts) {
 
     it("test companion  relation ", function() {
         var Registry_instance;
-        var tz=123456789;
+        var tz='039342444';
         return Regulator.deployed().then(function(instance) {
             Registry_instance = instance;
             return Registry_instance.getConsumerAttributePermission(tz,account,'tz',{from: accounts[1]});
@@ -177,7 +177,7 @@ contract('Regulator', function(accounts) {
             return Registry_instance.getConsumerAttributeValue.call(tz,account,'tz',{from: accounts[1]});
         }).then(function (attrvalue) {
                     console.log("attrvalue:",web3.toUtf8(attrvalue));
-                    assert.equal(web3.toUtf8(attrvalue), '123456789', "Registry wasn't empty!");
+                    assert.equal(web3.toUtf8(attrvalue), tz, "expected tz!");
 
             // assert.equal(attrvalue, 1, "attrvalue should be 1 !");
 
@@ -192,7 +192,7 @@ contract('Regulator', function(accounts) {
 
     it("test bad companion  relation ", function() {
         var Registry_instance;
-        var tz=123456789;
+        var tz='039342444';
         return Regulator.deployed().then(function(instance) {
             Registry_instance = instance;
             return Registry_instance.getConsumerAttributePermission(tz,account,'tz',{from: accounts[2]});
@@ -214,15 +214,15 @@ contract('Regulator', function(accounts) {
 
     });
 
-    it("test customer  permission change   ", function() {
+    it("test bed customer  permission change   ", function() {
         var Registry_instance;
-        var tz=123456789;
+        var tz='039342444';
         return Regulator.deployed().then(function(instance) {
             Registry_instance = instance;
             return Registry_instance.getConsumerAttributePermission(tz,account,'tz',{from: accounts[2]});
         }).then(function (attrperm) {
             console.log("attrperm:",attrperm.valueOf());
-            assert.equal(attrperm, 0, "attrvalue should be 1 !");
+            assert.equal(attrperm, 0, "attrvalue should be 0 !");
             return Registry_instance.getConsumerAttributeValue.call(tz,account,'tz',{from: accounts[2]});
         }).then(function (attrvalue) {
             console.log("attrvalue:",web3.toUtf8(attrvalue));
@@ -240,38 +240,43 @@ contract('Regulator', function(accounts) {
 
     it("test companion  permission change ", function() {
         var Registry_instance;
-        var tz=123456789;
+        var tz='039342444';
         return Regulator.deployed().then(function(instance) {
             Registry_instance = instance;
             return Registry_instance.getConsumerAttributePermission(tz,account,'tz',{from: accounts[1]});
         }).then(function (attrperm) {
-            // console.log("attrperm:",attrperm.valueOf());
+            console.log("attrperm:",attrperm.valueOf());
             assert.equal(attrperm, 1, "attrvalue should be 1 !");
             return Registry_instance.changeCompanionPermissionByCustomer(tz,account,accounts[1],'tz',0,{from: account});
         }).then(function (tx) {
             return Registry_instance.getConsumerAttributePermission(tz,account,'tz',{from: accounts[1]});
         }).then(function (attrperm) {
-            // console.log("attrperm:",attrperm.valueOf());
-            assert.equal(attrperm, 0, "attrvalue should be 0 !");
+            console.log("attrperm:",attrperm.valueOf());
+            assert.equal(attrperm.valueOf(), 0, "attrvalue should be 0 !");
 
         }).catch(function(error) {
             console.log("error "+error)
             assert.equal(error.toString(),'',
                 'Error detected')
         });
-
     });
 
-    it("test companion  permission change by companion", function() {
+    it("test companion  permission change by customer", function() {
         var Registry_instance;
-        var tz=123456789;
+        var tz='039342444';
         return Regulator.deployed().then(function(instance) {
             Registry_instance = instance;
+            console.log("begin:");
             return Registry_instance.getConsumerAttributePermission(tz,account,'tz',{from: accounts[1]});
         }).then(function (attrperm) {
-            // console.log("attrperm:",attrperm);
-            // assert.equal(attrperm, 1, "attrvalue should be 1 !");
-            return Registry_instance.changeCompanionPermissionByCustomer(tz,account,accounts[1],'tz',0,{from: accounts[1]});
+             console.log("attrperm:",attrperm);
+             assert.equal(attrperm.valueOf(), 0, "attrvalue should be 0 !");
+            return Registry_instance.changeCompanionPermissionByCustomer(tz,account,accounts[1],'tz',1,{from: account});
+        }).then(function (done) {
+            return Registry_instance.getConsumerAttributePermission(tz,account,'tz',{from: accounts[1]});
+        }).then(function (attrperm) {
+                console.log("attrperm:",attrperm);
+                assert.equal(attrperm.valueOf(), 1, "attrvalue should be 0 !");
 
         }).catch(function(error) {
             console.log("error "+error)
@@ -283,9 +288,14 @@ contract('Regulator', function(accounts) {
 
 
 
+
+
+
+
+
     // it("test show all attributes", function() {
     //     var Registry_instance;
-    //     var tz=123456789;
+    //     var tz='039342444';
     //     var attrnum_loop
     //     return Regulator.deployed().then(function(instance) {
     //         Registry_instance = instance;
@@ -322,158 +332,6 @@ contract('Regulator', function(accounts) {
     // });
 
 
-
-
-
-    // it("should change state to (wait for a customer ) ", function() {
-    //     var Regulator_instance;
-    //     var guaranteeRequest_instance;
-    //     var requestAddress;
-    //     return Regulator.deployed().then(function(instance) {
-    //         Regulator_instance = instance;
-    //         return Regulator_instance.getOwner.call();
-    //     }).then(function (regulatorAddress) {
-    //         account=regulatorAddress;
-    //         return Regulator_instance.getRequestsAddress.call();
-    //     }).then(function (guaranteeRequestAddresses) {
-    //         requestAddress=guaranteeRequestAddresses[0];
-    //         console.log("guaranteeRequestAddresses:"+requestAddress);
-    //         // console.log(typeof(guaranteeRequestAddresses[0]));
-    //         var guaranteeRequest= GuaranteeRequest.at(requestAddress);
-    //         guaranteeRequest.then(function(guaranteeRequestinstance) {
-    //             guaranteeRequest_instance=guaranteeRequestinstance;
-    //             return guaranteeRequest_instance.getId.call();
-    //         }).then(function (guaranteeRequestAddressesAt) {
-    //             assert.equal(guaranteeRequestAddressesAt, requestAddress, "Addresses is not equal!");
-    //             return guaranteeRequest_instance.getRequestState.call();
-    //         }).then(function (guaranteestate) {
-    //             console.log("guaranteestate result:");
-    //             console.log(guaranteestate);
-    //             assert.equal(guaranteestate.valueOf(), 1, "State should be 1 (created)!");
-    //             return guaranteeRequest_instance.getGuaranteeRequestData();
-    //         }).then(function (result) {
-    //
-    //             console.log("getGuaranteeRequestData result for type:"+ typeof(result));
-    //             console.log(result);
-    //             console.log(result[0],result[2],result[3],result[4],result[5] );
-    //             console.log(typeof(result[6]) );
-    //             return guaranteeRequest_instance.bankStateChange("bankStateChange test.",3,{from: account});
-    //         }).then(function (bankStateChangeed) {
-    //             for (var i = 0; i < bankStateChangeed.logs.length; i++) {
-    //                 var log = bankStateChangeed.logs[i];
-    //
-    //                 if (log.event == "BankStateChange") {
-    //                     // We found the event!
-    //                     console.log("BankStateChanged:");
-    //                     console.log(log.args);
-    //                     // break;
-    //                     return guaranteeRequest_instance.getRequestState.call();
-    //                 }
-    //             }
-    //             console.log("check for bankStateChange:");
-    //             console.log(bankStateChangeed);
-    //             assert.equal(bankStateChangeed.valueOf(), true, "bankStateChangeed wasn't true!");
-    //             return guaranteeRequest_instance.getRequestState.call();
-    //         }).then(function (result) {
-    //             console.log(result.toString());
-    //             console.log("guaranteestate result:");
-    //             console.log(result);
-    //             assert.equal(result.valueOf(), 3, "State should be 3 (changed to wait for customer)!");
-    //
-    //         }).catch(function(error) {
-    //             console.error(error);
-    //             assert.equal(error.toString(),'',
-    //                 'Error detected')
-    //         });
-    //
-    //     }).catch(function(error) {
-    //         console.error(error);
-    //         assert.equal(error.toString(),'',
-    //             'Error detected')
-    //     });
-    // });
-
-    //
-    // it("should create and change state to reject ", function() {
-    //     var Regulator_instance;
-    //     var guaranteeRequest_instance;
-    //     var requestAddress;
-    //     return Regulator.deployed().then(function(instance) {
-    //         Regulator_instance = instance;
-    //         return Regulator_instance.getOwner.call();
-    //     }).then(function (regulatorAddress) {
-    //         account=regulatorAddress;
-    //         console.log("regulatorAddress:"+account);
-    //
-    //
-    //         return Regulator_instance.createGuaranteeRequest.call(account ,account,account,"_purpose 1", 1000, dt,dt+1000000,1,0,{from: account});
-    //     }).then(function (guaranteeRequestAddresses) {
-    //         requestAddress=guaranteeRequestAddresses;
-    //         console.log("guaranteeRequestAddresses:"+requestAddress);
-    //         var guaranteeRequest= GuaranteeRequest.at(requestAddress);
-    //         guaranteeRequest.then(function(guaranteeRequestinstance) {
-    //             guaranteeRequest_instance=guaranteeRequestinstance;
-    //             return guaranteeRequest_instance.getId.call();
-    //         }).then(function (guaranteeRequestAddressesAt) {
-    //             assert.equal(guaranteeRequestAddressesAt, requestAddress, "Addresses is not equal!");
-    //             return guaranteeRequest_instance.getRequestState.call();
-    //         }).then(function (guaranteestate) {
-    //             console.log("guaranteestate result:");
-    //             console.log(guaranteestate);
-    //             assert.equal(guaranteestate.valueOf(), 1, "State should be 1 (created)!");
-    //             return guaranteeRequest_instance.getGuaranteeRequestData();
-    //         }).then(function (result) {
-    //
-    //             console.log("getGuaranteeRequestData result for type:"+ typeof(result));
-    //             console.log(result);
-    //             console.log(result[0],result[2],result[3],result[4],result[5] );
-    //             console.log(typeof(result[6]) );
-    //
-    //             return guaranteeRequest_instance.reject("test submit.",{from: account});
-    //         }).then(function (rejected) {
-    //             for (var i = 0; i < rejected.logs.length; i++) {
-    //                 var log = rejected.logs[i];
-    //
-    //                 if (log.event == "Rejected") {
-    //                     // We found the event!
-    //                     console.log("Rejected:");
-    //                     console.log(log.args);
-    //                     // break;
-    //                     return guaranteeRequest_instance.getRequestState.call();
-    //                 }
-    //             }
-    //             console.log("check for submited:");
-    //             console.log(rejected);
-    //             assert.equal(rejected.valueOf(), true, "rejected wasn't true!");
-    //             return guaranteeRequest_instance.getRequestState.call();
-    //         }).then(function (result) {
-    //             console.log(result.toString());
-    //             // for (var i = 0; i < result.logs.length; i++) {
-    //             //     var log = result.logs[i];
-    //             //
-    //             //     if (log.event == "State") {
-    //             //         // We found the event!
-    //             //         console.log("State:");
-    //             //         console.log(log.args);
-    //             //         // break;
-    //             //     }
-    //             // }
-    //             console.log("guaranteestate result:");
-    //             console.log(result);
-    //             assert.equal(result.valueOf(), 8, "State should be 8 (rejecteded)!");
-    //
-    //         }).catch(function(error) {
-    //             console.error(error);
-    //             assert.equal(error.toString(),'',
-    //                 'Error detected')
-    //         });
-    //
-    //     }).catch(function(error) {
-    //         console.error(error);
-    //         assert.equal(error.toString(),'',
-    //             'Error detected')
-    //     });
-    // });
 
 
 

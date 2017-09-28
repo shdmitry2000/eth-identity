@@ -5,13 +5,22 @@ module.exports = {
   entry: './app/javascripts/app.js',
   output: {
     path: path.resolve(__dirname, 'build'),
+    // path: path.resolve(__dirname, 'images'),
+    // path: path.resolve(__dirname, 'images/entre'),
     filename: 'app.js'
   },
+
   plugins: [
     // Copy our app's index.html to the build folder.
+      
     new CopyWebpackPlugin([
-      { from: './app/index.html', to: "index.html" },
-     ])
+      { from: './tmp/Archive_006/' } ,
+      { from: './app/setupbc.html', to: "setupbc.html" },
+      { from: './app/javascripts/app.js', to: "app.js" }
+
+
+      // { from: './app/' },
+    ])
   ],
   module: {
     rules: [
@@ -30,7 +39,7 @@ module.exports = {
           presets: ['es2015'],
           plugins: ['transform-runtime']
         }
-      }
+      } 
     ]
   },
   node: {

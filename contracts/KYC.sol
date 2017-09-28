@@ -9,23 +9,26 @@ contract KYC is PermissionExtender {
     bytes32[] public  attributesList;
     address customer;
     mapping(string => bytes32) internal attributes;
-    function KYC(address _customer,string fullname,uint tz,string laddress, string bank_account, string creadit_card_number, bool  isSmocking){
+    function KYC(address _customer,string fullname,string tz,string laddress, string bank_account, string creadit_card_number, string smoking, bool  isAlergic){
         customer=_customer;
         attributesList.push(stringToBytes32("fullname"));
         attributes["fullname"]=stringToBytes32(fullname);
         attributesList.push(stringToBytes32("tz"));
-        attributes["tz"]=uintToBytes32(tz);
+        attributes["tz"]=stringToBytes32(tz);
         attributesList.push(stringToBytes32("address"));
         attributes["address"]=stringToBytes32(laddress);
         attributesList.push(stringToBytes32("bank_account"));
         attributes["bank_account"]=stringToBytes32(bank_account);
         attributesList.push(stringToBytes32("creadit_card_number"));
         attributes["creadit_card_number"]=stringToBytes32(creadit_card_number);
-        attributesList.push(stringToBytes32("isSmocking"));
-        if(isSmocking)
-            attributes["isSmocking"]=stringToBytes32("YES");
+        attributesList.push(stringToBytes32("smoking"));
+        attributes["smoking"]=stringToBytes32(smoking);
+
+        attributesList.push(stringToBytes32("alergic"));
+        if(isAlergic)
+            attributes["alergic"]=stringToBytes32("YES");
         else
-            attributes["isSmocking"]=stringToBytes32("NO");
+            attributes["alergic"]=stringToBytes32("NO");
 
 
     }

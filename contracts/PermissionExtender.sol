@@ -28,11 +28,11 @@ contract PermissionExtender is Owners,IdentityUtils{
     function getAttributeLength() constant public returns (uint);
 
 
-    function setAttributePermission(string attrName ,address companionAddress , int permission)  constant public returns (bool)
+    function setAttributePermission(string attrName ,address companionAddress , int permission)  constant public returns (int)
     {
         //        require(msg.sender == owner || msg.sender==getCustomerAddress());
         permissions[attrName][companionAddress]=permission;
-        return true;
+        return permissions[attrName][companionAddress];
 
 
     }
