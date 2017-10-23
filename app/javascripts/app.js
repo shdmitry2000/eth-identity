@@ -51,9 +51,9 @@ window.App = {
     //     console.error(error);
     // })
 
-    console.log(web3.eth.accounts);
-    accounts=web3.eth.accounts;
-    account = accounts[0];
+    // console.log("web3.eth.accounts",web3.eth.accounts);
+    // accounts=web3.eth.accounts;
+    // account = accounts[0];
 
     // Get the initial account balance so it can be displayed.
     web3providera.eth.getAccounts(function (error, accs) {
@@ -111,16 +111,284 @@ window.App = {
 
   initSetupPage:function()
   {
-    document.getElementById("accounts").innerHTML = App.getBCAccounts();
-    document.getElementById("SSN").value = App.getTz();
+    var liveaccounts=App.getBCAccounts();
+    if (liveaccounts==null)
+    {
+      // Get the initial account balance so it can be displayed.
+      web3providera.eth.getAccounts(function (error, accs) {
+        console.log(error, accs);
+        if (error != null) {
+          alert("There was an error fetching your accounts.");
+          return;
+        }
 
-    document.getElementById("SSN").value = App.getTz();
-    document.getElementById("tz").value = App.getTz();
-    document.getElementById("account").value = App.getBCAccounts()[0];
-    document.getElementById("useraccount").value = App.getBCAccounts()[0];
-    document.getElementById("basecompanyaccount").value = App.getBCAccounts()[0];
-    document.getElementById("companioncompanyaccount").value = App.getBCAccounts()[1];
-    document.getElementById("companioncompanyaccount1").value = App.getBCAccounts()[1];
+        if (accs.length == 0) {
+          alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
+          return;
+        }
+
+        accounts = accs;
+
+        account = accounts[0];
+        liveaccounts=accs;
+
+
+
+        // document.getElementById("accounts").innerHTML = liveaccounts;
+        document.getElementById("accountbnhp").innerHTML = liveaccounts[0];
+
+        document.getElementById("SSN").value = App.getTz();
+
+        document.getElementById("SSN").value = App.getTz();
+        document.getElementById("tz").value = App.getTz();
+        document.getElementById("account").value = liveaccounts[0];
+        document.getElementById("useraccount").value = liveaccounts[0];
+        document.getElementById("basecompanyaccount").value = liveaccounts[0];
+        document.getElementById("companioncompanyaccount").value = liveaccounts[1];
+        // document.getElementById("companioncompanyaccount1").value = liveaccounts[1];
+
+        var select = document.getElementById('companioncompanyaccount1Opt');
+        if (liveaccounts.length > 0) {
+          for (var i = 1; i < liveaccounts.length; i++) {
+            console.log("options", i, liveaccounts[i]);
+            select.options[i-1] = new Option(liveaccounts[i], liveaccounts[i]);  //new Option("Text", "Value")
+          }
+        }
+
+        select = document.getElementById('selectbasecompanyaccountopt');
+        if (liveaccounts.length > 0) {
+          for (var i = 0; i < liveaccounts.length; i++) {
+            console.log("options", i, liveaccounts[i]);
+            select.options[i] = new Option(liveaccounts[i], liveaccounts[i]);  //new Option("Text", "Value")
+          }
+        }
+
+        select = document.getElementById('selectcompanioncompanyaccountopt');
+        if (liveaccounts.length > 0) {
+          for (var i = 0; i < liveaccounts.length; i++) {
+            console.log("options", i, liveaccounts[i]);
+            select.options[i] = new Option(liveaccounts[i], liveaccounts[i]);  //new Option("Text", "Value")
+          }
+        }
+
+
+        // select.selected(1);
+        document.getElementById("tzp").value = App.getTz();
+        // document.getElementById("basecompanyaccountp").value = liveaccounts[0];
+        // document.getElementById("companioncompanyaccountp").value = liveaccounts[1];
+
+
+      });
+    }
+    else {
+      console.log("liveaccounts", liveaccounts);
+
+
+      var select = document.getElementById('companioncompanyaccount1Opt');
+      if (liveaccounts.length > 0) {
+        for (var i = 1; i < liveaccounts.length; i++) {
+          console.log("options", i, liveaccounts[i]);
+          select.options[i] = new Option(liveaccounts[i], liveaccounts[i]);  //new Option("Text", "Value")
+        }
+      }
+
+      select = document.getElementById('selectbasecompanyaccountopt');
+      if (liveaccounts.length > 0) {
+        for (var i = 0; i < liveaccounts.length; i++) {
+          console.log("options", i, liveaccounts[i]);
+          select.options[i] = new Option(liveaccounts[i], liveaccounts[i]);  //new Option("Text", "Value")
+        }
+      }
+
+      select = document.getElementById('selectcompanioncompanyaccountopt');
+      if (liveaccounts.length > 0) {
+        for (var i = 0; i < liveaccounts.length; i++) {
+          console.log("options", i, liveaccounts[i]);
+          select.options[i] = new Option(liveaccounts[i], liveaccounts[i]);  //new Option("Text", "Value")
+        }
+      }
+
+
+      // document.getElementById("accounts").innerHTML = liveaccounts;
+      document.getElementById("accountbnhp").innerHTML = liveaccounts[0];
+
+      document.getElementById("SSN").value = App.getTz();
+
+      document.getElementById("SSN").value = App.getTz();
+      document.getElementById("tz").value = App.getTz();
+      document.getElementById("account").value = liveaccounts[0];
+      document.getElementById("useraccount").value = liveaccounts[0];
+      document.getElementById("basecompanyaccount").value = liveaccounts[0];
+      document.getElementById("companioncompanyaccount").value = liveaccounts[1];
+      document.getElementById("companioncompanyaccount1").value = liveaccounts[1];
+
+
+      document.getElementById("tzp").value = App.getTz();
+      document.getElementById("basecompanyaccountp").value = liveaccounts[0];
+      document.getElementById("companioncompanyaccountp").value = liveaccounts[1];
+
+
+
+    }
+
+
+    // App.getAllCompanies().then(function(results)
+    // {
+    //   console.log('getAllCompanies  ',results);
+    //   var select = document.getElementById('selectbasecompanyaccount');
+    //   if (results.length>0)
+    //   {
+    //     for(var i=0; i<results.length; i++)
+    //     {
+    //       console.log("options",i,results[i],results[i].Name, results[i].companyBCAddress);
+    //       select.options[i] = new Option(results[i].Name, results[i].companyBCAddress);  //new Option("Text", "Value")
+    //     }
+    //   }
+    //   // var status = document.getElementById("events");
+    //   // status.innerHTML =  " =>"+ result;
+    // }).catch(function(error)
+    // {
+    //   console.error("error",error);
+    // });
+
+
+    App.getHistory().then(function(results)
+    {
+      console.log('getHistory:  ',results);
+      var eventsHolder = document.getElementById('events');
+
+      eventsHolder.innerHTML=JSON.stringify(results);
+
+
+    }).catch(function(error)
+    {
+      console.error("error",error);
+    });
+
+
+  },
+
+
+   connectDemoRequest:function() {
+
+     var liveaccounts=App.getBCAccounts();
+     if (liveaccounts==null)
+     {
+       // Get the initial account balance so it can be displayed.
+       web3providera.eth.getAccounts(function (error, accs) {
+         console.log(error, accs);
+         if (error != null) {
+           alert("There was an error fetching your accounts.");
+           return;
+         }
+
+         if (accs.length == 0) {
+           alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
+           return;
+         }
+
+         accounts = accs;
+
+         account = accounts[0];
+         liveaccounts=accs;
+
+         document.getElementById("account").value  = liveaccounts[1];
+
+
+       });
+     }
+     else {
+       console.log("liveaccounts", liveaccounts);
+
+
+       var select = document.getElementById('selectbasecompanyaccount');
+       if (liveaccounts.length > 0) {
+         for (var i = 0; i < liveaccounts.length; i++) {
+           console.log("options", i, liveaccounts[i]);
+           select.options[i] = new Option(liveaccounts[i], i);  //new Option("Text", "Value")
+         }
+       }
+       document.getElementById("account").innerHTML  = liveaccounts[1];
+
+     }
+
+
+
+     document.getElementById("SSN").value = "039342444";
+     document.getElementById("fname").value = "פריד";
+     document.getElementById("name").value = "יעקב";
+    
+
+
+    App.getAllCompanies().then(function(results)
+      {
+        console.log('getAllCompanies  ',results);
+        var select = document.getElementById('selectbasecompanyaccount');
+        if (results.length>0)
+        {
+          for(var i=0; i<results.length; i++)
+          {
+            console.log("options",i,results[i],results[i].Name, results[i].companyBCAddress);
+            select.options[i] = new Option(results[i].Name, results[i].companyBCAddress);  //new Option("Text", "Value")
+          }
+        }
+        // var status = document.getElementById("events");
+        // status.innerHTML =  " =>"+ result;
+      }).catch(function(error)
+      {
+        console.error("error",error);
+      });
+
+
+},
+
+
+  RequestPormissions:function()
+  {
+
+  },
+
+  endDemoRequest:function() {
+
+    const tz = ""+document.getElementById("SSN").value;
+    var selector = document.getElementById("selectbasecompanyaccount");
+    const account2= ""+selector.options[selector.selectedIndex].value;
+    const account1=""+document.getElementById("account").value;
+
+
+    return Regulator.deployed().then(function (instance) {
+      console.log("begin:");
+
+      //   window.location.href = "registerend.html";
+      return instance.setRequestCompanionByCustomer(tz, account2, account1, true, {from: account});
+    }).then(function(dune)
+    {
+
+        window.location.href = "/";
+    }).catch(function (error) {
+      console.error("error " , error ,
+         'Error detected');
+      alert('error:'+error);
+    });
+
+  },
+
+  initEventViewPage:function()
+  {
+
+
+    App.getHistory().then(function(results)
+    {
+      console.log('getHistory:  ',results);
+      var eventsHolder = document.getElementById('events');
+
+      eventsHolder.innerHTML=JSON.stringify(results);
+
+
+    }).catch(function(error)
+    {
+      console.error("error",error);
+    });
 
   },
   
@@ -180,9 +448,143 @@ window.App = {
 
   },
 
-  initClal: function (account) {
+
+  getHistory :function() {
     var self = this;
-    self.submitCompanyCall(accounts[1], "כלל", "ראול ואלנברג 36");
+    return new Promise(function(resolve) {
+      var requestevents = [];
+      Regulator.deployed().then(function (instance) {
+        var allevents = instance.allEvents({fromBlock: 0, toBlock: 'latest'})
+
+        allevents.get(function (error, result) {
+
+          // RegulatoryContractDeployed({}, {fromBlock: 0, toBlock: 'latest'}).get(function (error, result) {
+          for (var i = result.length - 1; i >= 0; i--) {
+            var cur_result = result[i];
+            if (cur_result.event == 'ResumeCompanionByCustomer' || cur_result.event == 'RequestCompanionByCustomer') {
+              requestevents.push(App.populateLineData(cur_result.event, cur_result.args))
+            }
+          }
+
+          // console.log('getHistory',requestevents);
+          resolve(requestevents);
+          // return requestevents;
+
+        })
+      }).catch(function (error) {
+        console.error("getHistory error", error);
+        reject(error);
+      });
+    });
+},
+
+populateLineData:function(event, args){
+    var self = this;
+
+
+    const companionAddress = args.companionAddress;
+    const basecompanyAddress =args.basecompanyAddress;
+    const tz = args.tz;
+
+
+    var ask= {
+      event:event,
+      tz:tz,
+      basecompanyAddress: basecompanyAddress,
+      companionAddress: companionAddress
+
+    };
+
+    return ask;
+
+  },
+
+  GetCompaniesAddresses: function () {
+    var self = this;
+    Regulator.deployed().then(function (instance) {
+
+      return instance.getCompaniesList({from: account});
+    }).then(function (complist) {
+      return complist;
+    }).catch(function (e) {
+      // console.log(e);
+      self.setRegisterStatus("Unable to refresh balance; see log.",e);
+    });
+  },
+
+
+  GetCompaniesList: function () {
+    var self = this;
+    Regulator.deployed().then(function (instance) {
+
+      return instance.getCompaniesList({from: account});
+    }).then(function (complist) {
+      return complist;
+    }).catch(function (e) {
+      // console.log(e);
+      self.setRegisterStatus("Unable to refresh balance; see log.",e);
+    });
+  },
+
+  getAllCompanies: function () {
+    var self = this;
+  // function getAllUserRequests() {
+  /** Gets all guarantee requests for customer */
+  var companies=[];
+  return Regulator.deployed()
+      .then(function (instance) {
+        // debugger;
+        return instance.getCompaniesList.call({from: account});
+      }).then(function (companiesAddresses) {
+        console.log("companiesAddresses[]:", companiesAddresses);
+        return Promise.all(companiesAddresses.map(function(companyAddress) {
+              return new Promise(function(resolve, reject)
+              {
+                resolve(App.getOneCompany(companyAddress));
+              });
+        }))
+      }).catch(function (error) {
+        console.error(error);
+        reject(error);
+      })
+},
+
+  getOneCompany: function (companyAddress)  {
+  var self = this;
+  return Regulator.deployed()
+      .then(function (instance) {
+        return instance.getCompany.call(companyAddress);
+      }).then(function(result) {
+        console.log("getOneCompany:", result);
+        return App.populateCompanyAddressData(companyAddress,result);
+      })
+      .catch(function(e)  {
+        console.log(e);
+      });
+  },
+
+  populateCompanyAddressData:function(companyAddress,resultArr)  {
+
+  var self = this;
+  var ask= {
+    companyBCAddress: companyAddress,
+    Name: resultArr[0] ,
+    Address: resultArr[1]
+  };
+
+  // console.log("request data:", ask);
+
+  return ask;
+},
+
+  initCompany: function () {
+    var self = this;
+    var selector = document.getElementById("companioncompanyaccount1Opt");
+    const companioncompanyaccount1= ""+selector.options[selector.selectedIndex].value;
+
+     self.submitCompanyCall(companioncompanyaccount1,
+        document.getElementById("companioncompanyname1").value,
+        document.getElementById("companioncompanycompanyaddress1").value);
   },
 
 
@@ -658,6 +1060,24 @@ window.App = {
     {
       self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'alergic',0);
     }
+
+
+
+
+    return Regulator.deployed().then(function (instance) {
+
+
+      //   window.location.href = "registerend.html";
+      return instance.setRequestCompanionByCustomer(tz, self.getBCAccounts()[0],self.getBCAccounts()[1], false, {from: account});
+    }).then(function(dune)
+    {
+
+      window.location.href = "registerend.html";
+    }).catch(function (error) {
+      console.error("error " , error ,
+          'Error detected');
+      alert('error:'+error);
+    });
 
     // self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'creadit_card_number',1);
 

@@ -30,6 +30,7 @@ contract Regulator is Owners,IdentityUtils{
 //        string tz;
         address chainAddress;
         mapping(address => address)  permissions;
+        mapping(address => mapping(address => bool) )  requests;
     }
 
     mapping (string=>Consumer)  consumers;
@@ -120,6 +121,9 @@ contract Regulator is Owners,IdentityUtils{
 
     }
 
+
+
+
     function getConsumerAttributePermission( string tz,address basecompanyAddress,string attributeName) public constant returns(int permission)
     {
         // require(consumers[getConsumerAddress(tz)].chainAddress != address(0) && consumers[getConsumerAddress(tz)].permissions[basecompanyAddress]!= address(0));
@@ -148,7 +152,40 @@ contract Regulator is Owners,IdentityUtils{
 
     }
 
+    event RequestCompanionByCustomer(address indexed companionAddress,address indexed basecompanyAddress,string   tz,uint timestamp);
+    event ResumeCompanionByCustomer(address indexed companionAddress,address indexed basecompanyAddress,string   tz,uint timestamp);
 
+    function setRequestCompanionByCustomer(string tz , address basecompanyAddress,address companionAddress,bool operation)   {
+
+        // require(consumers[tz] ==msg.sender);
+    if(operation)
+    {
+        RequestCompanionByCustomer(companionAddress,basecompanyAddress, tz, now);
+    }
+    else
+    {
+        ResumeCompanionByCustomer(companionAddress,basecompanyAddress, tz, now);
+    }
+        consumers[tz].requests[basecompanyAddress][companionAddress]=operation;
+
+    }
+
+    function getRequestCompanionByCustomer(string tz , address basecompanyAddress,address companionAddress) public  returns (bool) {
+
+
+        return consumers[tz].requests[basecompanyAddress][companionAddress];
+
+
+    }
+
+//    event RequestPermission(address companionCompany,address basecompany ,string tz);
+//    function requestPermission(address companionCompany,address basecompany ,string tz)
+//    {
+//        require(companionCompany==msg.sender);
+//        RequestPermission(companionCompany, basecompany , tz);
+//
+//
+//    }
 
 //    function getConsumerAttributeValueString(string tz,address basecompanyAddress,string attributeName) public constant returns(string )
 //    {
@@ -179,6 +216,8 @@ contract Regulator is Owners,IdentityUtils{
 
         return companiesList;
     }
+
+
 
 
 

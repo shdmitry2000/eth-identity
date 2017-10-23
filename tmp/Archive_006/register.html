@@ -3,21 +3,24 @@
     <title>רישום לפוליסת ביטוח מנהלים</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <script>
-        function connectDemo() {
-            alert(
-                    document.getElementById("name").value  + ' '
-                    + document.getElementById("fname").value + ' ת״ז:'
-                    +document.getElementById("SSN").value + ' בקשתך התקבלה בהצלחה!' );
-            window.location.href = "registerend.html";
-            }
-    </script>
+    <script src="./app.js"></script>
+
 
 
 </head>
-<body width="640" height="895" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+<body width="640" height="895" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="App.connectDemoRequest();">
 
 <table style="text-align: right;" width="640"  border="0" cellpadding="0" cellspacing="0" border-spacing="0" id="Table_01">
+    <tr style="text-align: right;">
+        <td>
+            <p id="account"  />
+        </td>
+        <td>
+            <!--<p style="text-align: right;">מספר חברה-->
+        </td>
+
+    </tr>
     <tr style="text-align: right;">
         <td>
             <h2 style="text-align: center;"><strong>רישום לפוליסת ביטוח מנהלים</strong></h2>
@@ -30,8 +33,8 @@
     </tr>
 
     <tr style="text-align: right;">
-        <td>
-            <input id="name" name="name" type="text" value="יעקב" />
+        <td style="text-align: right;">
+            <input id="name" name="name" type="text" align="right"  value="יעקב" />
         </td>
         <td>
             <p style="text-align: right;">שם פרטי
@@ -40,7 +43,7 @@
     </tr>
     <tr style="text-align: right;">
         <td>
-            <input id="fname" type="text" value="פריד" />
+            <input id="fname" type="text"  align="right"  value="פריד" />
         </td>
         <td>
             <p style="text-align: right;">שם משפחה
@@ -49,7 +52,7 @@
     </tr>
     <tr style="text-align: right;">
         <td>
-            <input id="SSN" type="text" value="039342444" />
+            <input id="SSN" type="text"  align="right" value="039342444" />
         </td>
         <td>
             <p style="text-align: right;">תעודת זהות/דרכון
@@ -62,9 +65,23 @@
             </p>
         </td>
     </tr>
+
     <tr style="text-align: right;">
         <td>
-            <button style="text-align: right;" onclick="connectDemo();">שלח</button>
+            <select id="selectbasecompanyaccount">
+            </select>
+        </td>
+        <td>
+            <p style="text-align: right;"> הגורם לאישור המידע
+        </td>
+    </tr>
+
+
+
+
+    <tr style="text-align: right;">
+        <td>
+            <button style="text-align: right;" onclick="App.endDemoRequest();">שלח</button>
         </td>
     </tr>
 

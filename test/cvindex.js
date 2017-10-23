@@ -263,30 +263,51 @@ contract('Regulator', function(accounts) {
 
     it("test companion  permission change by customer", function() {
         var Registry_instance;
-        var tz='039342444';
-        return Regulator.deployed().then(function(instance) {
+        var tz = '039342444';
+        return Regulator.deployed().then(function (instance) {
             Registry_instance = instance;
             console.log("begin:");
-            return Registry_instance.getConsumerAttributePermission(tz,account,'tz',{from: accounts[1]});
+            return Registry_instance.getConsumerAttributePermission(tz, account, 'tz', {from: accounts[1]});
         }).then(function (attrperm) {
-             console.log("attrperm:",attrperm);
-             assert.equal(attrperm.valueOf(), 0, "attrvalue should be 0 !");
-            return Registry_instance.changeCompanionPermissionByCustomer(tz,account,accounts[1],'tz',1,{from: account});
+            console.log("attrperm:", attrperm);
+            assert.equal(attrperm.valueOf(), 0, "attrvalue should be 0 !");
+            return Registry_instance.changeCompanionPermissionByCustomer(tz, account, accounts[1], 'tz', 1, {from: account});
         }).then(function (done) {
-            return Registry_instance.getConsumerAttributePermission(tz,account,'tz',{from: accounts[1]});
+            return Registry_instance.getConsumerAttributePermission(tz, account, 'tz', {from: accounts[1]});
         }).then(function (attrperm) {
-                console.log("attrperm:",attrperm);
-                assert.equal(attrperm.valueOf(), 1, "attrvalue should be 0 !");
+            console.log("attrperm:", attrperm);
+            assert.equal(attrperm.valueOf(), 1, "attrvalue should be 0 !");
 
-        }).catch(function(error) {
-            console.log("error "+error)
+        }).catch(function (error) {
+            console.log("error " + error)
             // assert.equal(error.toString(),'',
             //     'Error detected')
         });
 
+
+
+
     });
 
 
+    it("test   permission request by customer", function () {
+        var Registry_instance;
+        var tz = '039342444';
+        return Regulator.deployed().then(function (instance) {
+            Registry_instance = instance;
+            console.log("begin:");
+            return Registry_instance.setRequestCompanionByCustomer(tz, account, accounts[1], true, {from: account});
+        }).then(function (done) {
+            return Registry_instance.getRequestCompanionByCustomer.call(tz, account, accounts[1],  {from: account});
+        }).then(function (done) {
+            console.log("requested:", done);
+            assert.equal(done, true, "attrvalue should be true !");
+         }).catch(function (error) {
+            console.log("error " + error)
+            // assert.equal(error.toString(),'',
+            //     'Error detected')
+        });
+    });
 
 
 
