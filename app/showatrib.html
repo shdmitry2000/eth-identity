@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blockchain PDF Index - sign dfs</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+</head>
+<body onload="App.initSetupPage();">
+<h1>show Panel</h1>
+<br />
+<!--<p id="accounts"></p>-->
+<br />
+<p id="accountbnhp"></p>
+<h3>There are <span id="activeAttributes"></span>  active atribs (The base account bank hapoalim!) .</h3>
+<br />
+<button onclick="App.checkDemoAttributes();">
+  show attributes</button>
+<button onclick="App.clearDemoAttributes();App.checkDemoAttributes();">
+  clear attributes</button>
+<br />
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!--<br />-->
+<!--<br />-->
+<!--<br />-->
+
+<!--<input id="SSN" type="text"  />tz-->
+<!--<input id="account" type="text"  />account-->
+
+<!--<button onclick="App.initCreateCustomer();">create customer</button>-->
+<!--<br />-->
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!--<br />-->
+
+<!--<select id="companioncompanyaccount1Opt">-->
+<!--</select>-->
+
+<!--&lt;!&ndash;<input id="companioncompanyaccount1" type="text"   />companion company account&ndash;&gt;-->
+<!--<input id="companioncompanyname1" type="text"  value="כלל" />companion company account-->
+<!--<input id="companioncompanycompanyaddress1" type="text"  value="ראול ואלנברג 36" />companion company account-->
+<!--<button onclick="App.initCompany();"> create company </button>-->
+<!--<br />-->
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!--<br />-->
+
+<!--<br />-->
+<input id="tz" type="text"  />tz
+<!--<br />-->
+<!--<input id="fname" type="text"  value="יעקב פריד" />full name-->
+<br />
+<input id="useraccount" type="text"  />user account
+<br />
+<!--<input id="basecompanyaccount" type="text"  />base company account-->
+<!--<br />-->
+<input id="companioncompanyaccount" type="text"  />companion company account
+<br />
+<!--<input id="bankaccount" type="text"  value="פועלים 123, מח 987654" />bank account-->
+<!--<br />-->
+<!--<input id="creditcart" type="text" value="14-24 5326 1234 1234 4154" />creditcart-->
+<!--<br />-->
+<!--<input id="address" type="text"  value="הבשן 33 ת״א,651451" />address-->
+<!--<br />-->
+<!--<input id="smoking" type="text"  value="2 פעמים ביום" />smoking-->
+<!--<br />-->
+<!--<br />-->
+<!--<br />-->
+
+<!--<button onclick="App.connectDemo();">create BaseCompany Relation </button>-->
+
+<!--<br />-->
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+
+<!--<input id="tzp" type="text"  />tz-->
+<!--<br />-->
+<!--&lt;!&ndash;<input id="basecompanyaccountp" type="text"  />base company account&ndash;&gt;-->
+<!--<select id="selectbasecompanyaccountopt">-->
+<!--</select>-->
+<!--base company account-->
+<!--<br />-->
+<!--<br />-->
+<!--&lt;!&ndash;<input id="companioncompanyaccountp" type="text"  />companion company account&ndash;&gt;-->
+<!--<select id="selectcompanioncompanyaccountopt">-->
+<!--</select>-->
+<!--companion company account-->
+<!--<br />-->
+<!--<br />-->
+
+<!--<button onclick="App.RequestPormissions();App.initEventViewPage();">Request Permission </button>-->
+
+<!--<button onclick="App.initEventViewPage();">show Request Permission events </button>-->
+
+<!--<br />-->
+<!--<br />-->
+
+<!--<h3>events: <span class="events" id="events"></span></h3>-->
+<!--<br />-->
+
+
+
+<!--<h3>There are last sign status: <span class="status" id="registerStatus"></span></h3>-->
+
+
+
+</body>
+</html>

@@ -16,8 +16,8 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './tmp/Archive_006/' } ,
       { from: './app/setupbc.html', to: "setupbc.html" },
+      { from: './app/showatrib.html', to: "showatrib.html" },
       { from: './app/javascripts/app.js', to: "app.js" }
-
 
       // { from: './app/' },
     ])

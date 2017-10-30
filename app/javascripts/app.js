@@ -132,19 +132,18 @@ window.App = {
         account = accounts[0];
         liveaccounts=accs;
 
+        document.getElementById("tz").value = App.getTz();
+        document.getElementById("useraccount").value = liveaccounts[0];
+        document.getElementById("companioncompanyaccount").value = liveaccounts[1];
 
-
+        document.getElementById("account").value = liveaccounts[0];
+        document.getElementById("basecompanyaccount").value = liveaccounts[0];
         // document.getElementById("accounts").innerHTML = liveaccounts;
         document.getElementById("accountbnhp").innerHTML = liveaccounts[0];
 
         document.getElementById("SSN").value = App.getTz();
 
-        document.getElementById("SSN").value = App.getTz();
-        document.getElementById("tz").value = App.getTz();
-        document.getElementById("account").value = liveaccounts[0];
-        document.getElementById("useraccount").value = liveaccounts[0];
-        document.getElementById("basecompanyaccount").value = liveaccounts[0];
-        document.getElementById("companioncompanyaccount").value = liveaccounts[1];
+        // document.getElementById("SSN").value = App.getTz();
         // document.getElementById("companioncompanyaccount1").value = liveaccounts[1];
 
         var select = document.getElementById('companioncompanyaccount1Opt');
@@ -209,18 +208,26 @@ window.App = {
       }
 
 
+      document.getElementById("tz").value = App.getTz();
+      document.getElementById("useraccount").value = liveaccounts[0];
+      document.getElementById("companioncompanyaccount").value = liveaccounts[1];
+
+      document.getElementById("basecompanyaccount").value = liveaccounts[0];
+      document.getElementById("account").value = liveaccounts[0];
+      document.getElementById("companioncompanyaccount1").value = liveaccounts[1];
+
       // document.getElementById("accounts").innerHTML = liveaccounts;
       document.getElementById("accountbnhp").innerHTML = liveaccounts[0];
 
       document.getElementById("SSN").value = App.getTz();
 
       document.getElementById("SSN").value = App.getTz();
-      document.getElementById("tz").value = App.getTz();
-      document.getElementById("account").value = liveaccounts[0];
-      document.getElementById("useraccount").value = liveaccounts[0];
-      document.getElementById("basecompanyaccount").value = liveaccounts[0];
-      document.getElementById("companioncompanyaccount").value = liveaccounts[1];
-      document.getElementById("companioncompanyaccount1").value = liveaccounts[1];
+      // document.getElementById("tz").value = App.getTz();
+      // document.getElementById("account").value = liveaccounts[0];
+      // document.getElementById("useraccount").value = liveaccounts[0];
+      // document.getElementById("basecompanyaccount").value = liveaccounts[0];
+      // document.getElementById("companioncompanyaccount").value = liveaccounts[1];
+      // document.getElementById("companioncompanyaccount1").value = liveaccounts[1];
 
 
       document.getElementById("tzp").value = App.getTz();
@@ -620,6 +627,23 @@ populateLineData:function(event, args){
      // account, account,accounts[1], "יעקב פריד", tz, "הבשן 33 ת״א,651451", "פועלים 123, מח 987654", "14-24 5326 1234 1234 4154", "2 סיגריות ביום" ,false);
   },
 
+  clearDemoAttributes: function () {
+    var self = this;
+
+
+      self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'address',0);
+
+      self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'bank_account',0);
+
+      self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'creadit_card_number',0);
+
+      self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'smoking',0);
+
+      self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'alergic',0);
+
+
+  },
+
   checkDemoAttributes: function () {
     var self = this;
     self.getActiveAttributes(
@@ -896,7 +920,7 @@ populateLineData:function(event, args){
                           var button2= " <button onclick=\"App.setAttributePermition(\'"+theBaseCompanyAddress+"\',\'"+thaCompanionCompanyAddress+"\',\'"+theTz+"\',\'"+attname+"\',1);\">change to 1</button>";
 
 
-                          document.getElementById("activeAttributes").innerHTML += "<br> attribute: "  + " name: " + attname + " value:" + attvalue + " prerm:"+ attpermission +
+                          document.getElementById("activeAttributes").innerHTML += "<br /> attribute -- name: " + attname + " <br/>   value:" + attvalue + "<br/>   permission :"+ attpermission +
                               "  "+
                               button1 + " " + button2
                               +"<br />";
