@@ -17,7 +17,7 @@ var Regulator = contract(Regulator_artifact);
 var KYC = contract(KYC_artifact);
 
 const http=require('http');
-const web3providera=new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3providera=new Web3(new Web3.providers.HttpProvider("http://35.158.139.208:8545"));
 
 // The following code is simple to show off interacting with your contracts.
 // As your needs grow you will likely need to change its form and structure.
@@ -1124,7 +1124,7 @@ window.addEventListener('load', function() {
   } else {
     console.warn("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-    web3provider=new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    web3provider=new Web3(new Web3.providers.HttpProvider("http://35.158.139.208:8545"));
   }
   window.web3 =web3provider;
 
