@@ -496,11 +496,12 @@ populateLineData:function(event, args){
 
 
     var ask= {
+      date:date,
       event:event,
-      tz:tz,
-      basecompanyAddress: basecompanyAddress,
-      companionAddress: companionAddress ,
-      date:date
+      tz:tz
+      // basecompanyAddress: basecompanyAddress,
+      // companionAddress: companionAddress ,
+
     };
 
     return ask;
