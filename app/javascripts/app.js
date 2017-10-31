@@ -514,6 +514,8 @@ populateLineData:function(event, args){
     return date.toLocaleString('en-GB',options);
   },
 
+  
+
   GetCompaniesAddresses: function () {
     var self = this;
     Regulator.deployed().then(function (instance) {
