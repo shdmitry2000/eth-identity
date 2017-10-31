@@ -510,7 +510,7 @@ populateLineData:function(event, args){
 
   transformDateSolToJS : function(longDate)  {
     const date = new Date(longDate * 1000);
-    return date.toLocaleDateString('en-GB');
+    return date.toLocaleDateString('en-GB') +" " +date.toLocaleTimeString();
   },
 
   GetCompaniesAddresses: function () {
