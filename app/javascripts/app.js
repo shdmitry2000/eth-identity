@@ -492,18 +492,24 @@ populateLineData:function(event, args){
     const companionAddress = args.companionAddress;
     const basecompanyAddress =args.basecompanyAddress;
     const tz = args.tz;
+    const date=self.transformDateSolToJS(args.timestamp);
 
 
     var ask= {
       event:event,
       tz:tz,
       basecompanyAddress: basecompanyAddress,
-      companionAddress: companionAddress
-
+      companionAddress: companionAddress ,
+      date:date
     };
 
     return ask;
 
+  },
+
+  transformDateSolToJS : function(longDate)  {
+    const date = new Date(longDate * 1000);
+    return date.toLocaleDateString('en-GB');
   },
 
   GetCompaniesAddresses: function () {
