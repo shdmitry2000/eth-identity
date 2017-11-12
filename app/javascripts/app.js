@@ -640,8 +640,11 @@ populateLineData:function(event, args){
   clearDemoAttributes: function () {
     var self = this;
 
+    self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'tz',0);
 
-      self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'address',0);
+    self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'fullname',0);
+
+    self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'address',0);
 
       self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'bank_account',0);
 
@@ -1050,6 +1053,9 @@ populateLineData:function(event, args){
 
   VarsAlert:function () {
     var self = this;
+    self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'tz',1);
+    self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'fullname',1);
+
     if (varA)
     {
       self.setAttributePermition(self.getBCAccounts()[0],self.getBCAccounts()[1],tz,'address',1);
